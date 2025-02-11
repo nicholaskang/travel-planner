@@ -18,3 +18,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+button:disabled {
+  opacity: 1;
+  background-color: initial;
+  color: initial;
+  border-color: initial;
+}
