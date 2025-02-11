@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { JSX, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import UserPersonalities, {
   UserPersonality,
@@ -9,7 +9,7 @@ import SystemPersonalities, {
 import UserAvatar from "./components/UserAvatar";
 import SystemAvatar from "./components/SystemAvatar";
 
-function App() {
+const App = (): JSX.Element => {
   const [userPrompt, setUserPrompt] = useState<string>("");
   const [response, setResponse] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -58,23 +58,22 @@ function App() {
     }
   };
 
-  const handleSelectUserPersonality = useCallback(
-    (personality: UserPersonality) => {
-      console.log(personality);
-      setSelectedUserPersonality(personality);
-    },
-    []
-  );
+  const handleSelectUserPersonality = (personality: UserPersonality) => {
+    console.log(personality);
+    setSelectedUserPersonality(personality);
+  };
 
-  const UserAvatarList = useMemo(() => {
-    return UserPersonalities.map((personality) => (
-      <UserAvatar
-        key={personality.key}
-        personality={personality}
-        handleSelectUserPersonality={handleSelectUserPersonality}
-      />
-    ));
-  }, [UserPersonalities, handleSelectUserPersonality]);
+  const UserAvatarList = (
+    <>
+      {UserPersonalities.map((personality: UserPersonality) => (
+        <UserAvatar
+          key={personality.key}
+          personality={personality}
+          handleSelectUserPersonality={handleSelectUserPersonality}
+        />
+      ))}
+    </>
+  );
 
   const SystemAvatarList = SystemPersonalities.map((personality) => (
     <SystemAvatar
@@ -126,6 +125,6 @@ function App() {
       </section>
     </main>
   );
-}
+};
 
 export default App;
