@@ -19,7 +19,24 @@ function App() {
       setError("");
       setResponse("");
 
-      const res = await model.generateContent(userPrompt);
+      const res = await model.generateContent({
+        contents: [
+          {
+            role: "system",
+            parts: [
+              {
+                text: "You are a fun and engaging travel assistant, well traveled, varying from experiences like backpacking to luxury experiences. You are also well versed on cuisine, dining, restaurants, reviews, and are able to make the best recommendations for each specific person's style, budget, taste, and preferenes. Keep responses short and action-packed. Avoid unnecessary information.",
+              },
+            ],
+          },
+          { role: "user", parts: [{ text: userPrompt }] },
+        ],
+        generationConfig: {
+          temperature: 0.8,
+          topP: 0.8,
+          maxOutputTokens: 500,
+        },
+      });
       setResponse(res.response.text());
       setUserPrompt("");
     } catch (error) {
