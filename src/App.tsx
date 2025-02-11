@@ -10,10 +10,10 @@ import UserAvatar from "./components/UserAvatar";
 import SystemAvatar from "./components/SystemAvatar";
 
 const App = (): JSX.Element => {
-  const [userPrompt, setUserPrompt] = useState<string>("");
-  const [response, setResponse] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [userPrompt, setUserPrompt] = useState("");
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [selectedUserPersonality, setSelectedUserPersonality] =
     useState<UserPersonality | null>(null);
   const [selectedSystemPersonality, setSelectedSystemPersonality] =
@@ -23,7 +23,7 @@ const App = (): JSX.Element => {
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  const fetchResponse = async () => {
+  const fetchResponse = async (): Promise<void> => {
     if (!userPrompt) return;
 
     try {
@@ -49,7 +49,9 @@ const App = (): JSX.Element => {
       //     maxOutputTokens: 500,
       //   },
       // });
-      setResponse(res.response.text());
+
+      // if (!res) { throw new Error("No response received"); }
+      // setResponse(res.response.text());
       setUserPrompt("");
     } catch (error) {
       setError(String(error));
@@ -58,12 +60,13 @@ const App = (): JSX.Element => {
     }
   };
 
-  const handleSelectUserPersonality = (personality: UserPersonality) => {
+  const handleSelectUserPersonality = (personality: UserPersonality): void => {
     console.log(personality);
     setSelectedUserPersonality(personality);
   };
 
-  const UserAvatarList = (
+  // Move these to separate components
+  const UserAvatarList = (): JSX.Element => (
     <>
       {UserPersonalities.map((personality: UserPersonality) => (
         <UserAvatar
@@ -75,12 +78,16 @@ const App = (): JSX.Element => {
     </>
   );
 
-  const SystemAvatarList = SystemPersonalities.map((personality) => (
-    <SystemAvatar
-      key={personality.key}
-      personality={personality}
-    />
-  ));
+  const SystemAvatarList = (): JSX.Element => (
+    <>
+      {SystemPersonalities.map((personality: SystemPersonality) => (
+        <SystemAvatar
+          key={personality.key}
+          personality={personality}
+        />
+      ))}
+    </>
+  );
 
   return (
     <main style={{ margin: "0 24px" }}>
@@ -111,11 +118,11 @@ const App = (): JSX.Element => {
         )}
         <section>
           <h2>Choose your travel persona</h2>
-          {UserAvatarList}
+          {UserAvatarList()}
         </section>
         <section>
           <h2>Choose your helper</h2>
-          {SystemAvatarList}
+          {SystemAvatarList()}
         </section>
       </form>
       <section>
