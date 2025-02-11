@@ -2,6 +2,8 @@ import { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import UserPersonalities from "./constants/UserPersonalities";
 import SystemPersonalities from "./constants/SystemPersonalities";
+import UserAvatar from "./components/UserAvatar";
+import SystemAvatar from "./components/SystemAvatar";
 
 function App() {
   const [userPrompt, setUserPrompt] = useState<string>("");
@@ -21,24 +23,24 @@ function App() {
       setError("");
       setResponse("");
 
-      const res = await model.generateContent({
-        contents: [
-          {
-            role: "system",
-            parts: [
-              {
-                text: "You are a fun and engaging travel assistant, well traveled, varying from experiences like backpacking to luxury experiences. You are also well versed on cuisine, dining, restaurants, reviews, and are able to make the best recommendations for each specific person's style, budget, taste, and preferenes. Keep responses short and action-packed. Avoid unnecessary information.",
-              },
-            ],
-          },
-          { role: "user", parts: [{ text: userPrompt }] },
-        ],
-        generationConfig: {
-          temperature: 0.8,
-          topP: 0.8,
-          maxOutputTokens: 500,
-        },
-      });
+      // const res = await model.generateContent({
+      //   contents: [
+      //     {
+      //       role: "system",
+      //       parts: [
+      //         {
+      //           text: "You are a fun and engaging travel assistant, well traveled, varying from experiences like backpacking to luxury experiences. You are also well versed on cuisine, dining, restaurants, reviews, and are able to make the best recommendations for each specific person's style, budget, taste, and preferenes. Keep responses short and action-packed. Avoid unnecessary information.",
+      //         },
+      //       ],
+      //     },
+      //     { role: "user", parts: [{ text: userPrompt }] },
+      //   ],
+      //   generationConfig: {
+      //     temperature: 0.8,
+      //     topP: 0.8,
+      //     maxOutputTokens: 500,
+      //   },
+      // });
       setResponse(res.response.text());
       setUserPrompt("");
     } catch (error) {
@@ -47,6 +49,20 @@ function App() {
       setLoading(false);
     }
   };
+
+  const UserAvatarList = UserPersonalities.map((personality) => (
+    <UserAvatar
+      key={personality.key}
+      personality={personality}
+    />
+  ));
+
+  const SystemAvatarList = SystemPersonalities.map((personality) => (
+    <SystemAvatar
+      key={personality.key}
+      personality={personality}
+    />
+  ));
 
   return (
     <main style={{ margin: "0 24px" }}>
@@ -69,19 +85,11 @@ function App() {
         <br />
         <section>
           <h2>Choose your travel persona</h2>
-          <ul>
-            {UserPersonalities.map((personality) => (
-              <li key={personality.key}>{personality.name}</li>
-            ))}
-          </ul>
+          {UserAvatarList}
         </section>
         <section>
           <h2>Choose your helper</h2>
-          <ul>
-            {SystemPersonalities.map((personality) => (
-              <li key={personality.key}>{personality.name}</li>
-            ))}
-          </ul>
+          {SystemAvatarList}
         </section>
       </form>
       <section>

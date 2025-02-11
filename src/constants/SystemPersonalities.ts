@@ -4,7 +4,7 @@ export interface SystemPersonality {
   description: string;
 }
 
-const systemPersonalities: SystemPersonality[] = [
+const SystemPersonalities: SystemPersonality[] = [
   {
     key: "formalConcierge",
     name: "Formal Concierge",
@@ -91,4 +91,4 @@ const systemPersonalities: SystemPersonality[] = [
   },
 ];
 
-export default systemPersonalities;
+export default SystemPersonalities;

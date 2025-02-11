@@ -5,7 +5,7 @@ export interface UserPersonality {
   travelPreferences: string[];
 }
 
-const userPersonalities: UserPersonality[] = [
+const UserPersonalities: UserPersonality[] = [
   {
     key: "thrillSeeker",
     name: "Thrill Seeker",
@@ -128,4 +128,4 @@ const userPersonalities: UserPersonality[] = [
   },
 ];
 
-export default userPersonalities;
+export default UserPersonalities;
