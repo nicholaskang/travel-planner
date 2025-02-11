@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import UserPersonalities from "./constants/UserPersonalities";
+import SystemPersonalities from "./constants/SystemPersonalities";
 
 function App() {
   const [userPrompt, setUserPrompt] = useState<string>("");
@@ -49,8 +51,12 @@ function App() {
   return (
     <main style={{ margin: "0 24px" }}>
       <h1>Travel Planner</h1>
-      <div>
-        <label htmlFor="destination">Where would you like to explore?</label>
+      <form>
+        <label
+          htmlFor="destination"
+          onSubmit={fetchResponse}>
+          Where would you like to explore?
+        </label>
         <br />
         <input
           type="text"
@@ -59,12 +65,25 @@ function App() {
           onChange={(e) => setUserPrompt(e.target.value)}
         />
         <br />
-        <button
-          onClick={fetchResponse}
-          disabled={loading || !userPrompt}>
-          Plan my trip
-        </button>
-      </div>
+        <button disabled={loading || !userPrompt}>Plan my trip</button>
+        <br />
+        <section>
+          <h2>Choose your travel persona</h2>
+          <ul>
+            {UserPersonalities.map((personality) => (
+              <li key={personality.key}>{personality.name}</li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h2>Choose your helper</h2>
+          <ul>
+            {SystemPersonalities.map((personality) => (
+              <li key={personality.key}>{personality.name}</li>
+            ))}
+          </ul>
+        </section>
+      </form>
       <section>
         {loading && <p>Loading...</p>}
         {response && <p>{response}</p>}
