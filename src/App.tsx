@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import UserPersonalities from "./constants/UserPersonalities";
-import SystemPersonalities from "./constants/SystemPersonalities";
+import UserPersonalities, {
+  UserPersonality,
+} from "./constants/UserPersonalities";
+import SystemPersonalities, {
+  SystemPersonality,
+} from "./constants/SystemPersonalities";
 import UserAvatar from "./components/UserAvatar";
 import SystemAvatar from "./components/SystemAvatar";
 
@@ -10,6 +14,10 @@ function App() {
   const [response, setResponse] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [selectedUserPersonality, setSelectedUserPersonality] =
+    useState<UserPersonality | null>(null);
+  const [selectedSystemPersonality, setSelectedSystemPersonality] =
+    useState<SystemPersonality | null>(null);
 
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
@@ -50,12 +58,23 @@ function App() {
     }
   };
 
-  const UserAvatarList = UserPersonalities.map((personality) => (
-    <UserAvatar
-      key={personality.key}
-      personality={personality}
-    />
-  ));
+  const handleSelectUserPersonality = useCallback(
+    (personality: UserPersonality) => {
+      console.log(personality);
+      setSelectedUserPersonality(personality);
+    },
+    []
+  );
+
+  const UserAvatarList = useMemo(() => {
+    return UserPersonalities.map((personality) => (
+      <UserAvatar
+        key={personality.key}
+        personality={personality}
+        handleSelectUserPersonality={handleSelectUserPersonality}
+      />
+    ));
+  }, [UserPersonalities, handleSelectUserPersonality]);
 
   const SystemAvatarList = SystemPersonalities.map((personality) => (
     <SystemAvatar
@@ -67,12 +86,12 @@ function App() {
   return (
     <main style={{ margin: "0 24px" }}>
       <h1>Travel Planner</h1>
-      <form>
-        <label
-          htmlFor="destination"
-          onSubmit={fetchResponse}>
-          Where would you like to explore?
-        </label>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          fetchResponse();
+        }}>
+        <label htmlFor="destination">Where would you like to explore?</label>
         <br />
         <input
           type="text"
@@ -83,6 +102,14 @@ function App() {
         <br />
         <button disabled={loading || !userPrompt}>Plan my trip</button>
         <br />
+        {selectedUserPersonality ? (
+          <p>Selected User Persona: {selectedUserPersonality.name}</p>
+        ) : (
+          <p>Select</p>
+        )}
+        {selectedSystemPersonality && (
+          <p>Selected System Persona: {selectedSystemPersonality.name}</p>
+        )}
         <section>
           <h2>Choose your travel persona</h2>
           {UserAvatarList}
