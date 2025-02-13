@@ -11,6 +11,11 @@ export default function UserAvatar({
 }: UserAvatarProps) {
   return (
     <div>
+      <img
+        width="120"
+        src={personality.image.src}
+        alt={personality.image.alt}
+      />
       <p>{personality.name}</p>
       <button onClick={() => handleSelectUserPersonality(personality)}>
         Select Personality

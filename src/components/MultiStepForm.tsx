@@ -12,17 +12,14 @@ export default function MultiStepForm(): JSX.Element {
   const [userPrompt, setUserPrompt] = useState("");
   const [response, setResponse] = useState("");
 
-  const handleNextStep = (): void => {
-    setStep((prevStep) => prevStep + 1);
-  };
-  const handlePreviousStep = (): void => {
-    setStep((prevStep) => prevStep - 1);
-  };
+  const handleNextStep = (): void => setStep((prevStep) => prevStep + 1);
+  const handlePreviousStep = (): void => setStep((prevStep) => prevStep - 1);
 
   const handleSelectUserPersonality = (personality: UserPersonality): void => {
     console.log(personality);
     setSelectedUserPersonality(personality);
   };
+
   // Generating Gemini Response
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
