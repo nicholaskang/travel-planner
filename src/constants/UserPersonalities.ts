@@ -1,4 +1,4 @@
-export interface UserPersonality {
+export interface IUserPersonality {
   key: string;
   name: string;
   description: string;
@@ -9,7 +9,7 @@ export interface UserPersonality {
   };
 }
 
-const UserPersonalities: UserPersonality[] = [
+const UserPersonalities: IUserPersonality[] = [
   {
     key: "thrillSeeker",
     name: "Thrill Seeker",

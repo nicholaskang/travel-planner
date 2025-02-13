@@ -1,17 +1,17 @@
 import { JSX } from "react";
 import UserPersonalities, {
-  UserPersonality,
+  IUserPersonality,
 } from "../constants/UserPersonalities";
 import UserAvatar from "./UserAvatar";
 
 export default function UserAvatarList({
   handleSelectUserPersonality,
 }: {
-  handleSelectUserPersonality: (personality: UserPersonality) => void;
+  handleSelectUserPersonality: (personality: IUserPersonality) => void;
 }): JSX.Element {
   return (
     <>
-      {UserPersonalities.map((personality: UserPersonality) => (
+      {UserPersonalities.map((personality: IUserPersonality) => (
         <UserAvatar
           key={personality.key}
           personality={personality}

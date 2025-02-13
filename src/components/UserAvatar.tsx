@@ -1,8 +1,8 @@
-import { UserPersonality } from "../constants/UserPersonalities";
+import { IUserPersonality } from "../constants/UserPersonalities";
 
 interface UserAvatarProps {
-  personality: UserPersonality;
-  handleSelectUserPersonality: (personality: UserPersonality) => void;
+  personality: IUserPersonality;
+  handleSelectUserPersonality: (personality: IUserPersonality) => void;
 }
 
 export default function UserAvatar({

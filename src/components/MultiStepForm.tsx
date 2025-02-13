@@ -1,13 +1,16 @@
 import { JSX, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { UserPersonality } from "../constants/UserPersonalities";
+import { IUserPersonality } from "../constants/UserPersonalities";
 import UserAvatarList from ".//UserAvatarList";
-import PreferenceList from "./PreferenceList";
+import PreferenceList from "./TravelPreferenceList";
 
 export default function MultiStepForm(): JSX.Element {
   const [step, setStep] = useState(1);
   const [selectedUserPersonality, setSelectedUserPersonality] =
-    useState<UserPersonality | null>(null);
+    useState<IUserPersonality | null>(null);
+  const [additionalPreferences, setAdditionalPreferences] = useState<string[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
@@ -16,9 +19,19 @@ export default function MultiStepForm(): JSX.Element {
   const handleNextStep = (): void => setStep((prevStep) => prevStep + 1);
   const handlePreviousStep = (): void => setStep((prevStep) => prevStep - 1);
 
-  const handleSelectUserPersonality = (personality: UserPersonality): void => {
+  const handleSelectUserPersonality = (personality: IUserPersonality): void => {
     setSelectedUserPersonality(personality);
     handleNextStep();
+  };
+  const handleSetAdditionalPreferences = (preferenceName: string) => {
+    setAdditionalPreferences((prevPreferences) => {
+      if (prevPreferences.includes(preferenceName)) {
+        return prevPreferences.filter(
+          (preference) => preference !== preferenceName
+        );
+      }
+      return [...prevPreferences, preferenceName];
+    });
   };
 
   // Fetch Gemini Response
@@ -107,7 +120,9 @@ export default function MultiStepForm(): JSX.Element {
         <section>
           <h2>Select up to 5 preferences</h2>
           <div>
-            <PreferenceList />
+            <PreferenceList
+              setAdditionalPreferences={handleSetAdditionalPreferences}
+            />
           </div>
           <button onClick={handlePreviousStep}>Back</button>
           <button onClick={handleNextStep}>Next</button>

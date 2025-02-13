@@ -1,7 +1,7 @@
-export interface TravelPreference {
+export interface ITravelPreference {
   key: string;
-  category: string;
-  icon: string;
+  categoryName: string;
+  categoryIcon: string;
   items: {
     key: string;
     name: string;
@@ -9,11 +9,11 @@ export interface TravelPreference {
   }[];
 }
 
-const TravelPreferences: TravelPreference[] = [
+const TravelPreferences: ITravelPreference[] = [
   {
     key: "destinationType",
-    category: "Destination Type",
-    icon: "🗺",
+    categoryName: "Destination Type",
+    categoryIcon: "🗺",
     items: [
       { key: "exploreEurope", name: "Explore Europe", icon: "🏰" },
       { key: "exploreAsia", name: "Explore Asia", icon: "🏯" },
@@ -37,8 +37,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "travelStyle",
-    category: "Travel Style",
-    icon: "🎒",
+    categoryName: "Travel Style",
+    categoryIcon: "🎒",
     items: [
       { key: "luxuryTravel", name: "Luxury & High-End Travel", icon: "💎" },
       {
@@ -57,8 +57,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "safetyAccessibility",
-    category: "Safety & Accessibility",
-    icon: "🛡",
+    categoryName: "Safety & Accessibility",
+    categoryIcon: "🛡",
     items: [
       {
         key: "soloFemaleTravel",
@@ -80,8 +80,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "lifestyleWork",
-    category: "Lifestyle & Work",
-    icon: "💼",
+    categoryName: "Lifestyle & Work",
+    categoryIcon: "💼",
     items: [
       {
         key: "digitalNomadFriendly",
@@ -107,8 +107,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "adventureActivities",
-    category: "Activities & Adventure",
-    icon: "🧗",
+    categoryName: "Activities & Adventure",
+    categoryIcon: "🧗",
     items: [
       {
         key: "activeAndAdventurous",
@@ -130,8 +130,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "relaxationLeisure",
-    category: "Relaxation & Leisure",
-    icon: "😌",
+    categoryName: "Relaxation & Leisure",
+    categoryIcon: "😌",
     items: [
       {
         key: "slowPacedAndQuiet",
@@ -153,8 +153,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "cultureHistory",
-    category: "Cultural & Historical Travel",
-    icon: "🏛",
+    categoryName: "Cultural & Historical Travel",
+    categoryIcon: "🏛",
     items: [
       {
         key: "artAndMuseums",
@@ -180,8 +180,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "foodDrink",
-    category: "Food & Drink Experiences",
-    icon: "🍽",
+    categoryName: "Food & Drink Experiences",
+    categoryIcon: "🍽",
     items: [
       { key: "foodieTours", name: "Gourmet & Foodie Travel", icon: "🍣" },
       { key: "streetFood", name: "Street Food & Market Tours", icon: "🌮" },
@@ -195,8 +195,8 @@ const TravelPreferences: TravelPreference[] = [
   },
   {
     key: "shopping",
-    category: "Shopping & Unique Finds",
-    icon: "🛍",
+    categoryName: "Shopping & Unique Finds",
+    categoryIcon: "🛍",
     items: [
       {
         key: "localHandicrafts",
