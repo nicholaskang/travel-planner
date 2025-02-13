@@ -2,6 +2,7 @@ import { JSX, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { UserPersonality } from "../constants/UserPersonalities";
 import UserAvatarList from ".//UserAvatarList";
+import PreferenceList from "./PreferenceList";
 
 export default function MultiStepForm(): JSX.Element {
   const [step, setStep] = useState(1);
@@ -16,8 +17,8 @@ export default function MultiStepForm(): JSX.Element {
   const handlePreviousStep = (): void => setStep((prevStep) => prevStep - 1);
 
   const handleSelectUserPersonality = (personality: UserPersonality): void => {
-    console.log(personality);
     setSelectedUserPersonality(personality);
+    handleNextStep();
   };
 
   // Generating Gemini Response
@@ -25,7 +26,20 @@ export default function MultiStepForm(): JSX.Element {
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const fetchResponse = async (): Promise<void> => {
-    if (!userPrompt) return;
+    if (!userPrompt || !selectedUserPersonality) return;
+
+    const userProfile = selectedUserPersonality.description;
+    const travelPrompt = `
+    Generate personalized travel recommendations for the following prompt: ${userProfile}
+    Include: 
+    - Background info on the location, 3-5 sentences
+    - 1-3 most recommended things to do
+    - 2-3 general activities
+    - 3-5 restaurants
+    - 2-3 hotels
+    - 1-3 activities for each location
+    - Budget considerations
+    `;
 
     try {
       setLoading(true);
@@ -42,7 +56,7 @@ export default function MultiStepForm(): JSX.Element {
               },
             ],
           },
-          { role: "user", parts: [{ text: userPrompt }] },
+          { role: "user", parts: [{ text: travelPrompt }] },
         ],
         generationConfig: {
           temperature: 0.8,
@@ -85,12 +99,23 @@ export default function MultiStepForm(): JSX.Element {
             handleSelectUserPersonality={handleSelectUserPersonality}
           />
           <button onClick={handlePreviousStep}>Back</button>
+        </section>
+      )}
+
+      {/* Step 3: Enter Additional Preferences */}
+      {step === 3 && (
+        <section>
+          <h2>Select up to 5 preferences</h2>
+          <div>
+            <PreferenceList />
+          </div>
+          <button onClick={handlePreviousStep}>Back</button>
           <button onClick={handleNextStep}>Next</button>
         </section>
       )}
 
       {/* Pre-Preview Step  */}
-      {step === 3 && (
+      {step === 4 && (
         <section>
           <form
             onSubmit={(e) => {
@@ -114,7 +139,7 @@ export default function MultiStepForm(): JSX.Element {
       )}
 
       {/* Loading / Error / Response States */}
-      {step === 4 && (
+      {step === 5 && (
         <section>
           {loading && <p>Loading...</p>}
           {response && <p>{response}</p>}
