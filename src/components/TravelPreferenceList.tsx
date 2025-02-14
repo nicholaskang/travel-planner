@@ -4,10 +4,12 @@ import TravelPreferenceCategories from "./TravelPreferenceCategories";
 
 interface TravelPreferenceListProps {
   setAdditionalPreferences: (additionalPreferences: string) => void;
+  disabledAfterMax: string[];
 }
 
 export default function TravelPreferenceList({
   setAdditionalPreferences,
+  disabledAfterMax,
 }: TravelPreferenceListProps): JSX.Element {
   return (
     <>
@@ -16,6 +18,7 @@ export default function TravelPreferenceList({
           key={preference.key}
           preference={preference}
           setAdditionalPreferences={setAdditionalPreferences}
+          disabledAfterMax={disabledAfterMax}
         />
       ))}
     </>

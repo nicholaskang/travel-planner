@@ -24,14 +24,11 @@ export default function MultiStepForm(): JSX.Element {
     handleNextStep();
   };
   const handleSetAdditionalPreferences = (preferenceName: string) => {
-    setAdditionalPreferences((prevPreferences) => {
-      if (prevPreferences.includes(preferenceName)) {
-        return prevPreferences.filter(
-          (preference) => preference !== preferenceName
-        );
-      }
-      return [...prevPreferences, preferenceName];
-    });
+    setAdditionalPreferences((prevPreferences) =>
+      prevPreferences.includes(preferenceName)
+        ? prevPreferences.filter((preference) => preference !== preferenceName)
+        : [...prevPreferences, preferenceName]
+    );
   };
 
   // Fetch Gemini Response
@@ -42,8 +39,10 @@ export default function MultiStepForm(): JSX.Element {
     if (!userPrompt || !selectedUserPersonality) return;
 
     const userProfile = selectedUserPersonality.description;
+    const userPreferences = additionalPreferences.join(", ");
     const travelPrompt = `
     Generate personalized travel recommendations for the following prompt: ${userProfile}
+    Apply these additional preferences where relevant: ${userPreferences}
     Include: 
     - Background info on the location, 3-5 sentences
     - 1-3 most recommended things to do
@@ -120,8 +119,21 @@ export default function MultiStepForm(): JSX.Element {
         <section>
           <h2>Select up to 5 preferences</h2>
           <div>
+            Selected Preferences:
+            {additionalPreferences.length > 0 ? (
+              <ul>
+                {additionalPreferences.map((preference) => (
+                  <li key={preference}>{preference}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No preferences selected.</p>
+            )}
+          </div>
+          <div>
             <PreferenceList
               setAdditionalPreferences={handleSetAdditionalPreferences}
+              disabledAfterMax={additionalPreferences}
             />
           </div>
           <button onClick={handlePreviousStep}>Back</button>
